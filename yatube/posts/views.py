@@ -28,8 +28,15 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
+    if request.user.is_authenticated:
+        following = Follow.objects.filter(
+            user=request.user, author=author
+        ).exists()
+    else:
+        following = False
     context = {
         'author': author,
+        'following': following,
     }
     context.update(get_page_context(request, author.posts.all()))
     return render(request, 'posts/profile.html', context)
@@ -108,8 +115,11 @@ def add_comment(request, post_id):
 
 @login_required
 def follow_index(request):
-    context = get_page_context(
-        request, Post.objects.filter(author__following__user=request.user))
+    context = {
+        'is_index': True,
+    }
+    context.update(get_page_context(
+        request, Post.objects.filter(author__following__user=request.user)))
     return render(request, 'posts/follow.html', context)
 
 
@@ -120,6 +130,7 @@ def profile_follow(request, username):
     is_follower = Follow.objects.filter(user=user, author=author)
     if user != author and not is_follower.exists():
         Follow.objects.create(user=user, author=author)
+
     return redirect(reverse('posts:profile', args=[username]))
 
 

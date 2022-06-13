@@ -4,7 +4,7 @@
 {% block content %}
     {% load cache %}
     {% include 'includes/switcher.html' %}
-    {% cache 20 index_page %}
+    {% cache 20 follow_page %}
     {% load thumbnail %}
     {% for post in page_obj %}
         <article>
