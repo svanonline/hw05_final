@@ -68,3 +68,13 @@ class PostURLTests(TestCase):
             with self.subTest(url=url):
                 self.assertTemplateUsed(self.authorized_client.get(url),
                                         template)
+
+    def test_url_404_error(self):
+        """ Тест на код возврата 404 """
+        response = self.client.get('/test')
+        self.assertEqual(response.status_code, 404)
+
+    def test_url_404_error_uses_correct_template(self):
+        """ Тест на кастомный шаблон при ошибке 404 """
+        response = self.client.get('/test')
+        self.assertTemplateUsed(response, 'core/404.html')
