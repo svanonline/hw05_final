@@ -151,4 +151,4 @@ def page_not_found(request, exception):
 
 
 def server_error(request):
-    return render(request, "core/403csrf.html", status=403)
+    return render(request, "core/403.html", status=403)
