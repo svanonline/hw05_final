@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
-
-from .forms import PostForm, CommentForm
-from .models import Group, Post, User, Follow
-from .utils import get_page_context
 from django.urls import reverse
+
+from .forms import CommentForm, PostForm
+from .models import Follow, Group, Post, User
+from .utils import get_page_context
 
 User = get_user_model()
 

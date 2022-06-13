@@ -1,15 +1,15 @@
-from django.core.files.uploadedfile import SimpleUploadedFile
+import shutil
+import tempfile
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
 from django.core.cache import cache
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import Client, TestCase
 from django.urls import reverse
 
-import tempfile
-import shutil
-
-from posts.models import Group, Post, Follow
+from posts.models import Follow, Group, Post
 
 User = get_user_model()
 
@@ -356,7 +356,7 @@ class CommonViewsTests(TestCase):
         ))
 
         response = new_authorized_client.get(reverse('posts:follow_index'))
-        following_post = response.context['page'].object_list[0]
+        following_post = response.context['page_obj'].object_list[0]
         self.assertEqual(following_post, self.post, (
             'Посты отслеживаемого автора не отображаются на странице избранных'
         ))
