@@ -1,0 +1,16 @@
+<div class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class='container'>
+        <a class="navbar-brand" href="{% url 'posts:index' %}"><span style="color:red">Ya</span>tube</a>
+        <nav class="my-2 my-md-0 mr-md-3">
+            {% if user.is_authenticated %}
+            <a class="p-2 btn btn-primary" href="{% url 'posts:post_create' %}">Новая запись</a>
+            Пользователь: <a class="p-2 btn btn-outline-info" href="{% url 'posts:profile' user.username %}">{{ user.username }}</a>
+            <a class="p-2 btn btn-primary" href="{% url 'users:passchange' %}">Изменить пароль</a>
+            <a class="p-2 btn btn-primary" href="{% url 'logout' %}">Выйти</a>
+            {% else %}
+            <a class="p-2 btn btn-primary" href="{% url 'users:login' %}">Войти</a> |
+            <a class="p-2 btn btn-primary" href="{% url 'users:signup' %}">Регистрация</a>
+            {% endif %}
+        </nav>
+    </div>
+</div>
