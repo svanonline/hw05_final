@@ -158,5 +158,5 @@ def page_not_found(request, exception):
     )
 
 
-def server_error(request):
+def server_error(request, *args, **argv):
     return render(request, "core/403.html", status=403)

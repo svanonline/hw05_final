@@ -1,4 +1,5 @@
 import shutil
+import tempfile
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -15,6 +16,7 @@ class PostFormTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        settings.MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
         cls.user = User.objects.create(username='TestUser')
         cls.authorized_client = Client()
         cls.authorized_client.force_login(cls.user)
@@ -32,8 +34,8 @@ class PostFormTest(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
+        shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
 
     def test_create_post(self):
         """ Проверка создания поста """
@@ -48,7 +50,8 @@ class PostFormTest(TestCase):
         uploaded = SimpleUploadedFile(
             name='small.gif',
             content=small_gif,
-            content_type='image/gif'
+            content_type='image/gif',
+
         )
         count_before = Post.objects.count()
         form_data = {
@@ -75,7 +78,7 @@ class PostFormTest(TestCase):
         self.assertEqual(new_post.group.pk, form_data['group'], (
             ' Группа нового поста не соответствует введеным данным'
         ))
-        self.assertEqual(new_post.image, form_data['image'])
+        self.assertEqual(new_post.image, 'posts/small.gif')
 
     def test_edit_post(self):
         form_data = {
