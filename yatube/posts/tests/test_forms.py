@@ -75,6 +75,7 @@ class PostFormTest(TestCase):
         self.assertEqual(new_post.group.pk, form_data['group'], (
             ' Группа нового поста не соответствует введеным данным'
         ))
+        self.assertEqual(new_post.image, form_data['image'])
 
     def test_edit_post(self):
         form_data = {
@@ -106,8 +107,6 @@ class PostFormTest(TestCase):
         """ Только авторизованный пользователь может комментировать """
         form_data = {
             'text': 'Test-text',
-            'author': self.user,
-            'post': self.post
         }
 
         response = self.authorized_client.post(

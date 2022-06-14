@@ -12,7 +12,8 @@ User = get_user_model()
 
 def index(request):
     context = get_page_context(
-        request, Post.objects.all().order_by('-pub_date'))
+        request, Post.objects.select_related(
+            'author', 'group').order_by('-pub_date'))
     return render(request, 'posts/index.html', context)
 
 
@@ -111,12 +112,19 @@ def add_comment(request, post_id):
             kwargs={
                 'post_id': post_id}
         ))
+    return render(
+        request, 'post_detail.html',
+        {'post_id': post_id,
+         'author': post.author,
+         'form': form,
+         }
+    )
 
 
 @login_required
 def follow_index(request):
     context = {
-        'is_index': True,
+        'is_index': False,
     }
     context.update(get_page_context(
         request, Post.objects.filter(author__following__user=request.user)))
@@ -126,10 +134,10 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     user = request.user
-    author = User.objects.get(username=username)
-    is_follower = Follow.objects.filter(user=user, author=author)
-    if user != author and not is_follower.exists():
-        Follow.objects.create(user=user, author=author)
+    author = get_object_or_404(User, username=username)
+    Follow.objects.filter(user=user, author=author)
+    if user != author:
+        Follow.objects.get_or_create(user=user, author=author)
 
     return redirect(reverse('posts:profile', args=[username]))
 

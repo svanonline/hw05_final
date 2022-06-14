@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import Comment, Follow, Post
+from .models import Comment, Post
 
 
 class PostForm(ModelForm):
@@ -22,10 +22,3 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'text': forms.Textarea(attrs={'cols': 30, 'rows': 5})
         }
-
-
-class FollowForm(ModelForm):
-    class Meta:
-        model = Follow
-        labels = {'user': 'Подписка на:', 'author': 'Автор записи'}
-        fields = ['user']
