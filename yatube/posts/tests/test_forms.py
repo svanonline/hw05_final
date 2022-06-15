@@ -29,7 +29,8 @@ class PostFormTest(TestCase):
         cls.post = Post.objects.create(
             text='TestPost',
             author=cls.user,
-            group=cls.group
+            group=cls.group,
+            image='posts/small.gif',
         )
 
     @classmethod
@@ -78,7 +79,7 @@ class PostFormTest(TestCase):
         self.assertEqual(new_post.group.pk, form_data['group'], (
             ' Группа нового поста не соответствует введеным данным'
         ))
-        self.assertEqual(new_post.image, 'posts/small.gif')
+        self.assertEqual(new_post.image, self.post.image)
 
     def test_edit_post(self):
         form_data = {
