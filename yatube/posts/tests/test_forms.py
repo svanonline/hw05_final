@@ -35,8 +35,8 @@ class PostFormTest(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        super().tearDownClass()
         shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
 
     def test_create_post(self):
         """ Проверка создания поста """
