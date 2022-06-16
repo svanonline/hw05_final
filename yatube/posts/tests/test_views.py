@@ -345,7 +345,7 @@ class CommonViewsTests(TestCase):
         self.assertFalse(
             Follow.objects.filter(
                 author=self.user,
-                user=self.user
+                user=new_user
             ).exists()
         )
 

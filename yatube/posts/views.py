@@ -113,11 +113,8 @@ def add_comment(request, post_id):
                 'post_id': post_id}
         ))
     return redirect(reverse('post_detail.html',
-                            {'post_id': post_id,
-                             'author': post.author,
-                             'form': form,
-                             }
-                            ))
+                            kwargs={'post_id': post_id,
+                                    }))
 
 
 @login_required
