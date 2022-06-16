@@ -319,21 +319,22 @@ class CommonViewsTests(TestCase):
             kwargs={'username': self.user.username}
         ))
 
-        self.assertFalse(
+        self.assertTrue(
             Follow.objects.filter(
                 author=self.user,
-                user=self.user
+                user=new_user
             ).exists())
 
     def test_authorized_user_unfollow(self):
         """ Тестирование отписки авторизованным пользователем """
-        Follow.objects.create(
-            author=self.user,
-            user=self.user
-        )
         new_user = User.objects.create(username='NewUser')
         new_authorized_client = Client()
         new_authorized_client.force_login(new_user)
+
+        Follow.objects.create(
+            author=self.user,
+            user=new_user
+        )
 
         # Unfollow
         new_authorized_client.get(reverse(
@@ -341,7 +342,7 @@ class CommonViewsTests(TestCase):
             kwargs={'username': self.user.username}
         ))
 
-        self.assertTrue(
+        self.assertFalse(
             Follow.objects.filter(
                 author=self.user,
                 user=self.user
